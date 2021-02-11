@@ -1,11 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
-// import Button from "@material-ui/core/Button";
-// import Typography from "@material-ui/core/Typography";
-// import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 
+import ReactMapGl, { NavigationControl } from 'react-map-gl';
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
+
+const INITIAL_VIEWPORT = {
+  latitude: 37.7577,
+  longitude: -122.4376,
+  zoom: 13
+}
 const Map = ({ classes }) => {
-  return <div>Map</div>;
+  const [viewPort, setViewPort] = useState(INITIAL_VIEWPORT);
+  return (<div className={classes.root}>
+    <ReactMapGl
+      width="100vw"
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      height="calc(100vh - 64px)"
+      mapboxApiAccessToken={"pk.eyJ1Ijoic2FoaWwyOTA3OTEiLCJhIjoiY2tsMDd1a3poMGl3aTJ1bGJyem0waWt0ZiJ9.JodR8KBYBkuBaOutv7DK0g"}
+      {...viewPort}
+      onViewportChange={setViewPort}
+    >
+      <div className={classes.navigationControl}>
+        <NavigationControl onViewportChange={setViewPort} />
+      </div>
+    </ReactMapGl>
+  </div>);
 };
 
 const styles = {
