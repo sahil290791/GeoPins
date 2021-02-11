@@ -8,6 +8,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MapIcon from "@material-ui/icons/Map";
 import Typography from "@material-ui/core/Typography";
 
+import Signout from './Auth/Signout';
+
 const Header = ({ classes }) => {
   const { state } = useContext(Context);
   const { currentUser } = state;
@@ -43,7 +45,7 @@ const Header = ({ classes }) => {
               </Typography>
             </div>
           )}
-          {/* signup button */}
+          <Signout />
         </Toolbar>
       </AppBar>
     </div>
