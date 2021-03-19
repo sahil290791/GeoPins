@@ -1,15 +1,65 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-// import TextField from "@material-ui/core/TextField";
-// import Typography from "@material-ui/core/Typography";
-// import Button from "@material-ui/core/Button";
-// import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
-// import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
-// import ClearIcon from "@material-ui/icons/Clear";
-// import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
+import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
+import ClearIcon from "@material-ui/icons/Clear";
+import SaveIcon from "@material-ui/icons/SaveTwoTone";
 
 const CreatePin = ({ classes }) => {
-  return <div>CreatePin</div>;
+  return (
+    <form className={classes.form}>
+      <Typography
+        className={classes.alignCenter}
+        color="secondary"
+        component="h2"
+        variant="h4"
+      >
+        <LandscapeIcon className={classes.iconLarge}/> Pin Location
+      </Typography>
+      <div>
+        <TextField
+          name="title"
+          label="title"
+          placeholder="Insert pin title"
+        >
+          <input
+            accept="img/*"
+            id="image"
+            type="file"
+            className={classes.input}
+          />
+          <label htmlFor="image">
+            <Button
+              component="span"
+              size="small"
+              className={classes.button}
+            >
+              <AddAPhotoIcon />
+            </Button>
+          </label>
+        </TextField>
+      </div>
+      <div className={classes.contentField}>
+        <TextField
+          name="content"
+          label="content"
+          multiline
+          rows={6}
+          margin="normal"
+          fullWidth
+          variant="outlined"
+        >
+
+        </TextField>
+      </div>
+      <div>
+
+      </div>
+    </form>
+  )
 };
 
 const styles = theme => ({
