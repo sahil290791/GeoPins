@@ -5,7 +5,8 @@ import differenceInMinutes from "date-fns/difference_in_minutes";
 import Context from '../context';
 import { useClient } from '../customHooks';
 import { GET_PINS_QUERY } from '../graphql/queries';
-import ReactMapGl, { NavigationControl, Marker } from 'react-map-gl';
+import { DELETE_PIN_MUTATION } from '../graphql/mutations';
+import ReactMapGl, { NavigationControl, Marker, Popup } from 'react-map-gl';
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
@@ -21,12 +22,21 @@ const Map = ({ classes }) => {
   const client = useClient();
   const [viewPort, setViewPort] = useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition] = useState(null);
+  const [popup, setPopup] = useState(null);
   const { state, dispatch } = useContext(Context);
 
   useEffect(() => {
     getPins();
     getUserPosition();
   }, []);
+
+  const handleSelectPin = (pin) => {
+    setPopup(pin);
+    dispatch({
+      type: "SET_PIN",
+      payload: pin,
+    })
+  };
 
   const handleMapClick = (event) => {
     const { lngLat, leftButton } = event; 
@@ -54,6 +64,18 @@ const Map = ({ classes }) => {
     });
   };
 
+  const handleDeletePin = async(pin) => {
+    const variables = {
+      pinId: pin._id
+    };
+    const { deletePin } = await client.request(DELETE_PIN_MUTATION, variables);
+    dispatch({
+      type: 'DELETE_PIN',
+      payload: deletePin,
+    });
+    setPopup(null);
+  };
+
   const getUserPosition = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -75,6 +97,8 @@ const Map = ({ classes }) => {
     const isNewPin = differenceInMinutes(Date.now(), Number(pin.createdAt)) <= 30;
     return isNewPin ? "limegreen" : "darkblue";
   };
+
+  const isAuthUser = (pin) => state.currentUser._id === pin.author._id;
 
   return (<div className={classes.root}>
     <ReactMapGl
@@ -121,10 +145,36 @@ const Map = ({ classes }) => {
           offsetLeft={-19}
           offsetTop={-37}
         >
-          <PinIcon size={40} color={highlightNewPin(pin)} />
+          <PinIcon onClick={() => handleSelectPin(pin)} size={40} color={highlightNewPin(pin)} />
         </Marker>
           )
       )}
+      {
+        popup && (
+          <Popup
+            anchor="top"
+            latitude={popup.latitude}
+            longitude={popup.longitude}
+            closeOnClick={false}
+            onClose={() => setPopup(null)}
+          >
+            <img
+              src={popup.image} className={classes.popupImage}
+              alt={popup.title}
+            />
+            <div className={classes.popupTab}>
+              <Typography>
+                {popup.latitude.toFixed(6)}, {popup.longitude.toFixed(6)}
+              </Typography>
+              {isAuthUser(popup) && (
+                <Button onClick={() => handleDeletePin(popup)}>
+                  <DeleteIcon className={classes.deleteIcon}/>
+                </Button>
+              )}
+            </div>
+          </Popup>
+        )
+      }
     </ReactMapGl>
     <Blog />
   </div>);
