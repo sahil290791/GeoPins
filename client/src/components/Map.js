@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { withStyles } from "@material-ui/core/styles";
 
 import Context from '../context';
+import { useClient } from '../customHooks';
+import { GET_PINS_QUERY } from '../graphql/queries';
 import ReactMapGl, { NavigationControl, Marker } from 'react-map-gl';
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -15,11 +17,13 @@ const INITIAL_VIEWPORT = {
   zoom: 13
 }
 const Map = ({ classes }) => {
+  const client = useClient();
   const [viewPort, setViewPort] = useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition] = useState(null);
   const { state, dispatch } = useContext(Context);
 
   useEffect(() => {
+    getPins();
     getUserPosition();
   }, []);
 
@@ -40,6 +44,14 @@ const Map = ({ classes }) => {
         }
       });
   }
+
+  const getPins = async () => {
+    const data = await client.request(GET_PINS_QUERY);
+    dispatch({
+      type: 'SET_PINS',
+      payload: data.getPins
+    });
+  };
 
   const getUserPosition = () => {
     if ("geolocation" in navigator) {
@@ -95,6 +107,18 @@ const Map = ({ classes }) => {
           </Marker>
         )
       }
+      {state.pins && state.pins.map((pin) => (
+        <Marker
+          key={pin._id}
+          latitude={pin.latitude}
+          longitude={pin.longitude}
+          offsetLeft={-19}
+          offsetTop={-37}
+        >
+          <PinIcon size={40} color="darkblue" />
+        </Marker>
+          )
+      )}
     </ReactMapGl>
     <Blog />
   </div>);
