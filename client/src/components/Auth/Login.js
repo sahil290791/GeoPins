@@ -6,13 +6,14 @@ import Typography from "@material-ui/core/Typography";
 
 import { ME_QUERY } from '../../graphql/queries';
 import Context from '../../context.js';
+import { BASE_URL } from '../../customHooks/useClient';
 
 const Login = ({ classes }) => {
   const { dispatch } = useContext(Context);
   const onSuccess = async (user) => {
     try {
       const idToken = user.getAuthResponse().id_token; 
-      const client = new GraphQLClient('http://localhost:4000/graphql', {
+      const client = new GraphQLClient(BASE_URL, {
         headers: {
           authorization: idToken
         }
