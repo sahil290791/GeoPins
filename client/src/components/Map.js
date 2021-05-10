@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import differenceInMinutes from "date-fns/difference_in_minutes";
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
+import { Subscription } from "react-apollo";
 
 import Context from '../context';
 import { useClient } from '../customHooks';
 import { GET_PINS_QUERY } from '../graphql/queries';
 import { DELETE_PIN_MUTATION } from '../graphql/mutations';
+import { PIN_ADDED_SUBSCRIPTION, PIN_DELETED_SUBSCRIPTION, PIN_UPDATED_SUBSCRIPTION } from '../graphql/subscriptions';
 import ReactMapGl, { NavigationControl, Marker, Popup } from 'react-map-gl';
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -19,6 +22,7 @@ const INITIAL_VIEWPORT = {
   zoom: 13
 }
 const Map = ({ classes }) => {
+  const mobileSize = useMediaQuery('(max-width: 650px)');
   const client = useClient();
   const [viewPort, setViewPort] = useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition] = useState(null);
@@ -68,11 +72,7 @@ const Map = ({ classes }) => {
     const variables = {
       pinId: pin._id
     };
-    const { deletePin } = await client.request(DELETE_PIN_MUTATION, variables);
-    dispatch({
-      type: 'DELETE_PIN',
-      payload: deletePin,
-    });
+    await client.request(DELETE_PIN_MUTATION, variables);
     setPopup(null);
   };
 
@@ -100,9 +100,10 @@ const Map = ({ classes }) => {
 
   const isAuthUser = (pin) => state.currentUser._id === pin.author._id;
 
-  return (<div className={classes.root}>
+  return (<div className={mobileSize ? classes.rootMobile : classes.root}>
     <ReactMapGl
       width="100vw"
+      scrollZoom={!mobileSize}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       height="calc(100vh - 64px)"
       mapboxApiAccessToken={"pk.eyJ1Ijoic2FoaWwyOTA3OTEiLCJhIjoiY2tsMDd1a3poMGl3aTJ1bGJyem0waWt0ZiJ9.JodR8KBYBkuBaOutv7DK0g"}

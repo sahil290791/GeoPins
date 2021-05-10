@@ -28,9 +28,9 @@ module.exports = {
                 ...args.input,
                 author: ctx.currentUser.id
             }).save();
-            const pinAddeed = await Pin.populate(newPin, "author");
-            pubSub.publish(PIN_ADDED, { pinAddeed });
-            return pinAddeed;
+            const pinAdded = await Pin.populate(newPin, "author");
+            pubSub.publish(PIN_ADDED, { pinAdded });
+            return pinAdded;
         }),
         deletePin: authenticated(async(root, args, ctx) => {
             const pinDeleted = await Pin.findOneAndDelete({ _id: args.pinId }).exec();
