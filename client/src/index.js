@@ -16,7 +16,7 @@ import ProtectedRoute from './ProtectedRoute';
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as serviceWorker from "./serviceWorker";
 
-const link = process.env.NODE_ENV === 'production' ? `wss://${process.env.BACKEND_HOSTNAME}/graphql` :
+const link = process.env.NODE_ENV === 'production' ? `wss://map-my-next-bike-ride.herokuapp.com/graphql` :
 `ws://localhost:4000/graphql`
 
 const wsLink = new WebSocketLink({
