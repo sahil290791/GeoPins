@@ -176,6 +176,36 @@ const Map = ({ classes }) => {
         )
       }
     </ReactMapGl>
+    <Subscription
+      subscription={PIN_ADDED_SUBSCRIPTION}
+      onSubscriptionData={({ subscriptionData }) => {
+        const { pinAdded } = subscriptionData.data;
+        dispatch({
+          type: "CREATE_PIN",
+          payload: pinAdded
+        });
+      }}
+    />
+    <Subscription
+      subscription={PIN_DELETED_SUBSCRIPTION}
+      onSubscriptionData={({ subscriptionData }) => {
+        const { pinDeleted } = subscriptionData.data;
+        dispatch({
+          type: 'DELETE_PIN',
+          payload: pinDeleted,
+        });
+      }}
+    />
+    <Subscription
+      subscription={PIN_UPDATED_SUBSCRIPTION}
+      onSubscriptionData={({ subscriptionData }) => {
+        const { pinUpdated } = subscriptionData.data;
+        dispatch({
+          type: "CREATE_COMMENT",
+          payload: pinUpdated
+        });
+      }}
+    />
     <Blog />
   </div>);
 };

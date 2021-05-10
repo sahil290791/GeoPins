@@ -45,12 +45,8 @@ const CreatePin = ({ classes }) => {
         content,
         ...state.draft
       };
-      const { createPin } = await client.request(CREATE_PIN_MUTATION, variables);
+      await client.request(CREATE_PIN_MUTATION, variables);
       handleDeleteDraft(e);
-      dispatch({
-        type: 'CREATE_PIN',
-        payload: createPin
-      });
     } catch (error) {
       setSubmitting(false);
       console.log("Error creating Pin", error);

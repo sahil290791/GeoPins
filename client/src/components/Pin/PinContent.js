@@ -6,10 +6,12 @@ import Context from '../../context';
 import Typography from "@material-ui/core/Typography";
 import AccessTime from "@material-ui/icons/AccessTime";
 import Face from "@material-ui/icons/Face";
+import Comments from "../Comment/Comments";
+import CreateComment from "../Comment/CreateComment";
 
 const PinContent = ({ classes }) => {
   const { state } = useContext(Context);
-  const { currentPin: { title, content, author, createdAt, comment } } = state;
+  const { currentPin: { title, content, author, createdAt, comments } } = state;
   return (
     <div className={classes.root}>
       <Typography
@@ -35,6 +37,12 @@ const PinContent = ({ classes }) => {
       <Typography variant="subtitle1" gutterBottom>
         {content}
       </Typography>
+      {/* Pin Comment */}
+      <CreateComment />
+      <Comments comments={comments} />
+      <div>
+
+      </div>
     </div>
   );
 };
