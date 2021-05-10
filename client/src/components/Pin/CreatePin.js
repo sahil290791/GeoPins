@@ -10,7 +10,6 @@ import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
 
-import config from '../../config';
 import { useClient } from '../../customHooks';
 import Context from '../../context';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
@@ -30,7 +29,7 @@ const CreatePin = ({ classes }) => {
     data.append("upload_preset", "geopins");
     data.append("cloud_name", "dg8dtnfam");
     const response = await axios.post(
-      config.CLOUDINARY_API,
+      "https://api.cloudinary.com/v1_1/dg8dtnfam/image/upload",
       data
     );
     return response.data.url;

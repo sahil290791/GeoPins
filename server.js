@@ -14,27 +14,12 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error(err));
 
 
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://140369:<password>@cluster0.2wnmw.mongodb.net/<dbname>?retryWrites=true&w=majority";
-// const client = new MongoClient(process.env.MONGO_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-// });
-// client.connect(err => {
-//     console.log('connected');
-//     //   const collection = client.db("test").collection("test");
-//     if (err) {
-//         console.error(err);
-//     }
-//     // perform actions on the collection object
-//     client.close();
-// });
-
-
 const server = new ApolloServer({
     cors: true,
     typeDefs,
     resolvers,
+    // introspection: true,
+    // playground: true,
     context: async ({ req }) => {
         let authToken = null;
         let currentUser = null;
@@ -50,8 +35,6 @@ const server = new ApolloServer({
         return { currentUser };
     }
 });
-
-// server.applyMiddleware({ cors: false });
 
 server.listen({ port: process.env.PORT || 4000 }).then(( {url} ) => {
     console.log(`

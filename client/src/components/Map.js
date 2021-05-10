@@ -4,8 +4,6 @@ import differenceInMinutes from "date-fns/difference_in_minutes";
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
 import { Subscription } from "react-apollo";
 
-import config from '../config'
-
 import Context from '../context';
 import { useClient } from '../customHooks';
 import { GET_PINS_QUERY } from '../graphql/queries';
@@ -108,14 +106,14 @@ const Map = ({ classes }) => {
   };
 
   const isAuthUser = (pin) => state.currentUser._id === pin.author._id;
-
+  console.log(process.env.MAP_GL_AUTH_KEY);
   return (<div className={mobileSize ? classes.rootMobile : classes.root}>
     <ReactMapGl
       width="100vw"
       scrollZoom={!mobileSize}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       height="calc(100vh - 64px)"
-      mapboxApiAccessToken={config.MAP_GL_AUTH_KEY}
+      mapboxApiAccessToken={"pk.eyJ1Ijoic2FoaWwyOTA3OTEiLCJhIjoiY2tsMDd1a3poMGl3aTJ1bGJyem0waWt0ZiJ9.JodR8KBYBkuBaOutv7DK0g"}
       {...viewPort}
       onViewportChange={setViewPort}
       onClick={handleMapClick}
