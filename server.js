@@ -53,10 +53,10 @@ const server = new ApolloServer({
 
 // server.applyMiddleware({ cors: false });
 
-server.listen().then(( {url} ) => {
+server.listen({ port: process.env.PORT || 4000 }).then(( {url} ) => {
     console.log(`
         Server is running!
-        Listening on port 4000
+        Listening on port ${process.env.PORT || 4000 }
         Explore at https://studio.apollographql.com/dev
     `, url);
 });
